@@ -1,0 +1,61 @@
+﻿@model MojecHRApp.Models.Files
+@{
+    ViewData["Title"] = "UploadFile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="col-lg-12" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Upload File</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12  ">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Upload File</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <br />
+                        <form asp-action="UploadFile" method="post" enctype="multipart/form-data">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="FileType" class="control-label"></label>
+                                        <select asp-for="FileType" class="form-control">
+                                            <option>School Certificate</option>
+                                            <option>ID</option>
+                                            <option>NYSC Certificate</option>
+                                        </select>
+                                        <span asp-validation-for="FileType" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Upload File</label><br />
+                                        <span>Select File:</span>
+                                        <input type="file" name="postedFiles" required />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                    <a asp-action="AreaList" class="btn btn-primary">Back to list</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
