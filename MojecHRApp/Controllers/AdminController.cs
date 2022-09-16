@@ -41,7 +41,15 @@ namespace MojecHRApp.Controllers
             {
                 RedirectToAction("Login");
             }
+            connectionString();
+            con.Open();
+            com.Connection = con;
+            SqlCommand cmd = new SqlCommand("select  Count(*) from  LoginTbl ", con);
+            int r = Convert.ToInt32(cmd.ExecuteScalar());
+            ViewBag.TotalStaff = r;
+
             return View();
+
         }
         public IActionResult Emails()
         {

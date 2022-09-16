@@ -57,7 +57,7 @@ namespace MojecHRApp.Controllers
                     {
                         HttpContext.Session.SetString("Username", user.UserName);
                         TempData["save"] = "Login Successful";
-                        return RedirectToAction("Dashboard", "Staff");
+                        return RedirectToAction("RegisterStaffDetails", "Staff");
                     }
 
                     if (user.Role == "Management")

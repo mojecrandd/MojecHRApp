@@ -261,8 +261,7 @@ namespace MojecHRApp.Controllers
             }
 
             return files;
-        }
-        
+        }    
         public IActionResult LeaveRequest(string? email)
         {
             if (HttpContext.Session.GetString("Username") == null)
@@ -273,7 +272,6 @@ namespace MojecHRApp.Controllers
             var request = _staffservices.GetLeaveRequestbyEmail(email);
             return View(request);
         }
-
         public IActionResult NewRequest()
         {
             if (HttpContext.Session.GetString("Username") == null)
@@ -282,7 +280,6 @@ namespace MojecHRApp.Controllers
             }
             return View();
         }
-
         [HttpPost]
         public IActionResult NewRequest(LeaveRequest leaveRequest)
         {
