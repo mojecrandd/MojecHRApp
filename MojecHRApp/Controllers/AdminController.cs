@@ -48,6 +48,10 @@ namespace MojecHRApp.Controllers
             int r = Convert.ToInt32(cmd.ExecuteScalar());
             ViewBag.TotalStaff = r;
 
+            SqlCommand cmd2 = new SqlCommand("select  Count(*) from  LeaveRequest ", con);
+            int  e= Convert.ToInt32(cmd2.ExecuteScalar());
+            ViewBag.Leave = e;
+
             return View();
 
         }
@@ -283,6 +287,71 @@ namespace MojecHRApp.Controllers
 
 
         }
+
+
+        public IActionResult DisableEditing(string Id)
+        {
+            using(SqlConnection con = new SqlConnection(ConnectionString))
+            {
+                con.Open();
+                SqlCommand cmd =  new SqlCommand("Update StaffDetails set IsEdit = 'Yes' where EmailAddress = '"+Id+"'",con);
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.ExecuteNonQuery();
+                SqlCommand cmd2 = new SqlCommand("Update Files set IsEdit = 'Yes' where Email = '" + Id + "'", con);
+                cmd2.CommandType = System.Data.CommandType.Text;
+                cmd2.ExecuteNonQuery();
+                SqlCommand cmd3 = new SqlCommand("Update Experience set IsEdit = 'Yes' where Username = '" + Id + "'", con);
+                cmd3.CommandType = System.Data.CommandType.Text;
+                cmd3.ExecuteNonQuery();
+                SqlCommand cmd4 = new SqlCommand("Update LoginTbl set IsEdit = 'Yes' where Username = '" + Id + "'", con);
+                cmd4.CommandType = System.Data.CommandType.Text;
+                cmd4.ExecuteNonQuery();
+                con.Close();
+
+                TempData["save"] = "Profile Update Disabled";
+                return RedirectToAction("AllStaffForLock");
+
+
+            }
+        }
+
+        public IActionResult EnableEditing(string Id)
+        {
+            using (SqlConnection con = new SqlConnection(ConnectionString))
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("Update StaffDetails set IsEdit = 'No' where EmailAddress = '" + Id + "'", con);
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.ExecuteNonQuery();
+                SqlCommand cmd2 = new SqlCommand("Update Files set IsEdit = 'No' where Email = '" + Id + "'", con);
+                cmd2.CommandType = System.Data.CommandType.Text;
+                cmd2.ExecuteNonQuery();
+                SqlCommand cmd3 = new SqlCommand("Update Experience set IsEdit = 'No' where Username = '" + Id + "'", con);
+                cmd3.CommandType = System.Data.CommandType.Text;
+                cmd3.ExecuteNonQuery();
+                SqlCommand cmd4 = new SqlCommand("Update LoginTbl set IsEdit = 'No' where Username = '" + Id + "'", con);
+                cmd4.CommandType = System.Data.CommandType.Text;
+                cmd4.ExecuteNonQuery();
+                con.Close();
+
+                TempData["save"] = "Profile Update Enable";
+                return RedirectToAction("AllStaffForLock");
+
+
+            }
+        }
+
+        public IActionResult AllStaffForLock()
+        {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                RedirectToAction("Login");
+            }
+
+            var staff = _adminService.GetLoginTbls();
+            return View(staff);
+        }
+
 
     }
 }

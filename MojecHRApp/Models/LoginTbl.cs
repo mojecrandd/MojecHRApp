@@ -15,5 +15,7 @@ namespace MojecHRApp.Models
         public string? Fullname { get; set; } = string.Empty;
         public string? Role { get; set; } = string.Empty;
         public string? IsActive { get; set; } = "Active";
+
+        public string? IsEdit { get; set; }
     }
 }

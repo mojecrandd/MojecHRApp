@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MojecHRApp.DAL;
 
@@ -11,9 +12,10 @@ using MojecHRApp.DAL;
 namespace MojecHRApp.Migrations
 {
     [DbContext(typeof(HRDbContext))]
-    partial class HRDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220928174313_isEditable")]
+    partial class isEditable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -149,9 +151,6 @@ namespace MojecHRApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IsActive")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IsEdit")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")

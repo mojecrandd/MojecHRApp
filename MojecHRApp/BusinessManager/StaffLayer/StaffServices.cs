@@ -63,6 +63,8 @@ namespace MojecHRApp.BusinessManager.StaffLayer
         }
         public void Update(StaffDetails details)
         {
+
+
             var accountToBrUpdated = _dbContext.StaffDetails.Where(x => x.EmailAddress == details.EmailAddress).SingleOrDefault();
             accountToBrUpdated.Firstname = details.Firstname;
             accountToBrUpdated.Middlename = details.Middlename;

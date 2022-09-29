@@ -9,6 +9,8 @@
         public string? Email { get; set; }
         public string? FileType { get; set; }
 
+        public string? IsEdit { get; set; }
+
 
 
 

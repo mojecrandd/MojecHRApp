@@ -12,5 +12,7 @@ namespace MojecHRApp.Models
         public string? From { get; set;}
         public string? To { get; set;}
         public string? Username { get; set;}
+
+        public string? IsEdit { get; set; }
     }
 }

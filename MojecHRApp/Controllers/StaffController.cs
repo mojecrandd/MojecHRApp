@@ -5,6 +5,7 @@ using MojecHRApp.DAL;
 using MojecHRApp.Migrations;
 using MojecHRApp.Models;
 using System.Configuration.Provider;
+using System.Drawing;
 
 namespace MojecHRApp.Controllers
 {
@@ -15,6 +16,10 @@ namespace MojecHRApp.Controllers
         public IStaffServices _staffservices { get; set; }
         public string ConnectionString { get; set; }
         public string ProviderName { get; set; }
+
+        SqlConnection con = new SqlConnection();
+        SqlCommand com = new SqlCommand();
+
         private HRDbContext _dbContext;
         public StaffController(IStaffServices staffservices,HRDbContext dbContext, IConfiguration config)
         {
@@ -24,6 +29,12 @@ namespace MojecHRApp.Controllers
             ConnectionString = _config.GetConnectionString("ConnectionString");
             ProviderName = "System.Data.SqlClient";
         }
+
+        void connectionString()
+        {
+            con.ConnectionString = _config.GetConnectionString("ConnectionString");
+        }
+
         public IActionResult Dashboard()
        {
           
@@ -76,7 +87,19 @@ namespace MojecHRApp.Controllers
         [HttpPost]
         public IActionResult EditStaffDetails([FromForm]StaffDetails details)
         {
+
             details.EmailAddress = HttpContext.Session.GetString("Username");
+            connectionString();
+            con.Open();
+            com.Connection = con;
+            SqlCommand cmd = new SqlCommand("select IsEdit from StaffDetails where EmailAddress = '"+details.EmailAddress+"'", con);
+            string r = Convert.ToString(cmd.ExecuteScalar());
+            if(r == "Yes")
+            {
+                TempData["save"] = "Sorry, Your Account Has been locked";
+                return View();
+            }
+
             _staffservices.Update(details);
             TempData["save"] = "Data updated successfully";
             return View();
@@ -105,6 +128,18 @@ namespace MojecHRApp.Controllers
         {
             string? username = HttpContext.Session.GetString("Username");
             experience.Username = username;
+
+            connectionString();
+            con.Open();
+            com.Connection = con;
+            SqlCommand cmd = new SqlCommand("select IsEdit from StaffDetails where EmailAddress = '" + experience.Username + "'", con);
+            string r = Convert.ToString(cmd.ExecuteScalar());
+            if (r == "Yes")
+            {
+                TempData["save"] = "Sorry, Your Account Has been locked";
+                return RedirectToAction("GetStaffExperience");
+            }
+
             _staffservices.CreateExperience(experience);
             TempData["save"] = "Data Added Successfully";
             return RedirectToAction("GetStaffExperience");
@@ -115,10 +150,18 @@ namespace MojecHRApp.Controllers
             {
                 RedirectToAction("Login");
             }
-            if (HttpContext.Session.GetString("Username") == null)
+            string? username = HttpContext.Session.GetString("Username");
+            connectionString();
+            con.Open();
+            com.Connection = con;
+            SqlCommand cmd = new SqlCommand("select IsEdit from StaffDetails where EmailAddress = '" + username + "'", con);
+            string r = Convert.ToString(cmd.ExecuteScalar());
+            if (r == "Yes")
             {
-                RedirectToAction("Login");
+                TempData["save"] = "Sorry, Your Account Has been locked";
+                return RedirectToAction("GetStaffExperience");
             }
+
             var staffdetails = _staffservices.GetExperienceByID(Id);
             return View(staffdetails);
         }
@@ -141,6 +184,18 @@ namespace MojecHRApp.Controllers
         [HttpPost]
         public IActionResult UploadFile(List<IFormFile> postedFiles, Files files)
         {
+            string? username = HttpContext.Session.GetString("Username");
+            connectionString();
+            con.Open();
+            com.Connection = con;
+            SqlCommand cmd2 = new SqlCommand("select IsEdit from StaffDetails where EmailAddress = '" + username + "'", con);
+            string r = Convert.ToString(cmd2.ExecuteScalar());
+            if (r == "Yes")
+            {
+                TempData["save"] = "Sorry, Your Account Has been locked";
+                return RedirectToAction("StaffFiles");
+            }
+
             files.Email = HttpContext.Session.GetString("Username");
             foreach(IFormFile postedFile in postedFiles)
             {

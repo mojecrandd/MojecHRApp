@@ -58,6 +58,7 @@ namespace MojecHRApp.Models
 	 public string? AidForWork { get; set; }
 	 public string? Allergy { get; set; }
 	 public string? EmployeeID { get; set; }
+     public string? IsEdit { get; set; }
 
     }
 }
